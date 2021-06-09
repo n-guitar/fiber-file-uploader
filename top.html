@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <v-app>
+        <v-main>
+          <v-app-bar dense>
+            <v-toolbar-title>simple file uploader</v-toolbar-title>
+          </v-app-bar>
+
+          <v-container>
+            <v-file-input
+              v-model="files"
+              color="deep-purple accent-4"
+              counter
+              label="File input"
+              multiple
+              placeholder="Select your files"
+              prepend-icon="mdi-paperclip"
+              outlined
+              :show-size="1000"
+            >
+              <template v-slot:selection="{ index, text }">
+                <v-chip v-if="index < 2" color="deep-purple accent-4" dark label small>
+                  {{ text }}
+                </v-chip>
+
+                <span v-else-if="index === 2" class="text-overline grey--text text--darken-3 mx-2">
+                  +{{ files.length - 2 }} File(s)
+                </span>
+              </template>
+            </v-file-input>
+            <v-btn class="mr-4" @click="sendFile"> send files </v-btn>
+            <v-btn @click="sendFileClear"> clear </v-btn>
+          </v-container>
+        </v-main>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        vuetify: new Vuetify(),
+        data() {
+          return {
+            files: [],
+          };
+        },
+        methods: {
+          sendFile() {
+            if (this.files) {
+              let formData = new FormData();
+              // files
+              for (let file of this.files) {
+                formData.append("document", file, file.name);
+                console.log(file, file.name);
+              }
+              fetch("/files", {
+                body: formData,
+                method: "POST",
+              })
+                .then((response) => response.text())
+                .then((result) => console.log(result))
+                .catch((error) => console.log("error", error));
+            }
+
+            this.files = [];
+          },
+          sendFileClear() {
+            console.log("file clear");
+            this.files = [];
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
