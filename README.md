@@ -1,4 +1,4 @@
-# fiber-fileserver
+# fiber-file-uploader
 
 the simple file uploader
 
