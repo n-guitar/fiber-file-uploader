@@ -11,7 +11,7 @@ the simple file uploader
 - _$PWD/files_ set your directory
 
 ```bash
-$ docker run -p 3000:3000 --rm -v $PWD:/app/files -it naotoguitar/fiber-file-uploader:1.00
+$ docker run -p 3000:3000 --rm -v $PWD:/app/files -it nguitar/fiber-file-uploader:1.00
 ```
 
 # kubernetes sample
@@ -37,7 +37,7 @@ spec:
         app: fiber-file-uploader
     spec:
       containers:
-        - image: naotoguitar/fiber-file-uploader:1.00
+        - image: nguitar/fiber-file-uploader:1.00
           name: fiber-file-uploader
           volumeMounts:
             - mountPath: /app/files
